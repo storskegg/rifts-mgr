@@ -6,6 +6,50 @@ import (
 	"fmt"
 )
 
+// Roll is an interface generally referring to any form of roll, simple or complex
+type Roll interface {
+	Roll() (int, error)
+	Sum() int
+}
+
+// RollSimple represents a simple roll (e.g. 1d8 or 3d6) with no multipliers
+type RollSimple struct {
+	N       int
+	Sides   int
+	Results []int
+}
+func (rs *RollSimple) Roll() (int, error) {
+	var n int
+	for i := 0; i < rs.N; i++ {
+		n++
+		r, err := XRoll(rs.Sides)
+		if err != nil {
+			return n, err
+		}
+		rs.Results = append(rs.Results, r)
+	}
+	return n, nil
+}
+func (rs *RollSimple) Sum() (sum int) {
+	for r := range rs.Results {
+		sum += r
+	}
+	return sum
+}
+
+// RollComplex represents a simple roll with a multiplier (e.g. 2d4 x 1000)
+type RollComplex struct {
+	RollSimple RollSimple
+	Multiplier int
+}
+func (rc *RollComplex) Roll() (int, error) {
+	n, err := rc.RollSimple.Roll()
+	return n, err
+}
+func (rc *RollComplex) Sum() int {
+	return rc.RollSimple.Sum() * rc.Multiplier
+}
+
 // XRoll is a method that accepts a number of sides, and returns a value between 1 and `sides` inclusively.
 // Because so many people "don't trust" the machine rolls, I've opted for cryptographically random numbers.
 // This is overkill, but you know...gotta satisfy the masses.
