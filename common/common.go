@@ -18,6 +18,7 @@ type RollSimple struct {
 	Sides   int
 	Results []int
 }
+
 func (rs *RollSimple) Roll() (int, error) {
 	var n int
 	for i := 0; i < rs.N; i++ {
@@ -39,9 +40,10 @@ func (rs *RollSimple) Sum() (sum int) {
 
 // RollComplex represents a simple roll with a multiplier (e.g. 2d4 x 1000)
 type RollComplex struct {
-	RollSimple RollSimple
+	RollSimple *RollSimple
 	Multiplier int
 }
+
 func (rc *RollComplex) Roll() (int, error) {
 	n, err := rc.RollSimple.Roll()
 	return n, err
