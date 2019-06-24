@@ -74,3 +74,31 @@ func XRoll(sides int) (int, error) {
 
 	return result, nil
 }
+
+// DamageType is refers to SDC vs MDC
+type DamageType int
+
+const (
+	// SDC is Standard Damage Capacity
+	SDC DamageType = 0
+	// MDC is Mega Damage Capacity
+	MDC DamageType = 1
+)
+
+// Artifact represents any _thing_ of value, be it armor, a weapon, or a crocheted doily made by the character's
+// grandmother. This does not include faction credits
+type Artifact struct {
+	Name           string
+	Notes          []string
+	Cost           int
+	Weight         float64
+	DamageCapacity int
+	DamageType     DamageType
+}
+
+// Equipment represents an Artifact that may be equipped or worn (including power armor), but does not include things
+// that can be piloted like mounts or vehicles.
+type Equipment struct {
+	*Artifact
+	Equipped bool
+}

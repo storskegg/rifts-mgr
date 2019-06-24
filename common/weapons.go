@@ -6,7 +6,7 @@ type Ammo struct {
 }
 
 type Weapon struct {
-	Name           string
+	*Equipment
 	Damage         Roll
 	StrikeAimBurst bool     // TODO: Update the type here
 	Special        []string // TODO: Update the type here
