@@ -20,16 +20,14 @@ type RollSimple struct {
 }
 
 func (rs *RollSimple) Roll() (int, error) {
-	var n int
 	for i := 0; i < rs.N; i++ {
-		n++
 		r, err := XRoll(rs.Sides)
 		if err != nil {
-			return n, err
+			return 0, err
 		}
 		rs.Results = append(rs.Results, r)
 	}
-	return n, nil
+	return rs.Sum(), nil
 }
 func (rs *RollSimple) Sum() (sum int) {
 	for r := range rs.Results {
@@ -45,8 +43,11 @@ type RollComplex struct {
 }
 
 func (rc *RollComplex) Roll() (int, error) {
-	n, err := rc.RollSimple.Roll()
-	return n, err
+	_, err := rc.RollSimple.Roll()
+	if err != nil {
+		return 0, err
+	}
+	return rc.Sum(), nil
 }
 func (rc *RollComplex) Sum() int {
 	return rc.RollSimple.Sum() * rc.Multiplier
@@ -73,4 +74,33 @@ func XRoll(sides int) (int, error) {
 	}
 
 	return result, nil
+}
+
+// StatRoll represents the special type of roll used for a single stat at character creation
+func StatRoll() (int, error) {
+	core := &RollSimple{
+		N:     3,
+		Sides: 6,
+	}
+	got, err := core.Roll()
+	if err != nil {
+		return 0, err
+	}
+	if got == 16 || got == 17 || got == 18 {
+		exceptional := &RollSimple{
+			N:     2,
+			Sides: 6,
+		}
+		_, err = exceptional.Roll()
+		if err != nil {
+			return 0, err
+		}
+		core.N++
+		core.Results = append(core.Results, exceptional.Results[0])
+		if exceptional.Results[0] == 6 {
+			core.N++
+			core.Results = append(core.Results, exceptional.Results[1])
+		}
+	}
+	return got, nil
 }

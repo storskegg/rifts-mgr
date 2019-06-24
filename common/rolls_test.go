@@ -32,10 +32,7 @@ func TestRollSimple_Roll(t *testing.T) {
 		if len(simple.Results) != 0 {
 			t.Errorf("expecting %d Results to equal 0 before Roll()", len(simple.Results))
 		}
-		n, err := simple.Roll()
-		if n != simple.N {
-			t.Errorf("expected %d to equal N %d", n, simple.N)
-		}
+		_, err := simple.Roll()
 		if err != nil {
 			t.Error(err)
 		}
@@ -83,12 +80,9 @@ func TestRollComplex_Roll(t *testing.T) {
 		if len(myRoll.RollSimple.Results) != 0 {
 			t.Errorf("expected %d Results to equal 0 before Roll()", len(myRoll.RollSimple.Results))
 		}
-		n, err := myRoll.Roll()
+		_, err := myRoll.Roll()
 		if err != nil {
 			t.Error(err)
-		}
-		if n != myRoll.RollSimple.N {
-			t.Errorf("expected %d to equal N %d", n, myRoll.RollSimple.N)
 		}
 	}
 }
@@ -108,9 +102,6 @@ func TestRollComplex_Sum(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		if n != myRoll.RollSimple.N {
-			t.Errorf("expected %d to equal N %d", n, myRoll.RollSimple.N)
-		}
 		for r := range myRoll.RollSimple.Results {
 			want += r
 		}
@@ -118,6 +109,9 @@ func TestRollComplex_Sum(t *testing.T) {
 		got := myRoll.Sum()
 		if got != want {
 			t.Errorf("exptected %d to equal %d", got, want)
+		}
+		if n != got {
+			t.Errorf("expected Roll sum %d to equal Sum result %d", n, got)
 		}
 	}
 }
