@@ -29,7 +29,8 @@ func (rs *RollSimple) Roll() (int, error) {
 	}
 	return rs.Sum(), nil
 }
-func (rs *RollSimple) Sum() (sum int) {
+func (rs *RollSimple) Sum() int {
+	var sum int
 	for r := range rs.Results {
 		sum += r
 	}
@@ -77,14 +78,14 @@ func XRoll(sides int) (int, error) {
 }
 
 // StatRoll represents the special type of roll used for a single stat at character creation
-func StatRoll() (int, error) {
+func StatRoll() (*RollSimple, error) {
 	core := &RollSimple{
 		N:     3,
 		Sides: 6,
 	}
 	got, err := core.Roll()
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	if got == 16 || got == 17 || got == 18 {
 		exceptional := &RollSimple{
@@ -93,7 +94,7 @@ func StatRoll() (int, error) {
 		}
 		_, err = exceptional.Roll()
 		if err != nil {
-			return 0, err
+			return nil, err
 		}
 		core.N++
 		core.Results = append(core.Results, exceptional.Results[0])
@@ -102,5 +103,5 @@ func StatRoll() (int, error) {
 			core.Results = append(core.Results, exceptional.Results[1])
 		}
 	}
-	return got, nil
+	return core, nil
 }

@@ -115,3 +115,19 @@ func TestRollComplex_Sum(t *testing.T) {
 		}
 	}
 }
+
+func TestStatRoll(t *testing.T) {
+	var want int
+	pp, err := StatRoll()
+	if err != nil {
+		t.Error(err)
+	}
+	for r := range pp.Results {
+		want += r
+	}
+	got := pp.Sum()
+	if got != want {
+		t.Errorf("expected Sum %d to equal sum %d of results %v", got, want, pp.Results)
+	}
+	t.Logf("Rolled %d for P.P. with the following set: %v", pp.Sum(), pp.Results)
+}
