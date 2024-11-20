@@ -1,5 +1,10 @@
 package common
 
+import (
+	"github.com/storskegg/rifts-mgr/internal/common"
+	"github.com/storskegg/rifts-mgr/internal/common/rolls"
+)
+
 // Artifact represents any _thing_ of value, be it armor, a weapon, or a crocheted doily made by the character's
 // grandmother. This does not include faction credits
 type Artifact struct {
@@ -8,7 +13,7 @@ type Artifact struct {
 	Cost           int
 	Weight         float64
 	DamageCapacity int
-	DamageType     DamageType
+	DamageType     common.DamageType
 }
 
 // Equipment represents an Artifact that may be equipped or worn (including power armor), but does not include things
@@ -40,7 +45,7 @@ type Armor struct {
 
 type Weapon struct {
 	*Equipment
-	Damage         Roll
+	Damage         rolls.Roll
 	StrikeAimBurst bool     // TODO: Update the type here
 	Special        []string // TODO: Update the type here
 }

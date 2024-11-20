@@ -1,6 +1,9 @@
 package common
 
-import "time"
+import (
+	"github.com/storskegg/rifts-mgr/internal/common/rolls"
+	"time"
+)
 
 // PowerPointType represents the points used to fuel an ability
 type PowerPointType int
@@ -19,7 +22,7 @@ type Power struct {
 	Cost           int
 	SavingThrow    bool // TODO: Update this type
 	Duration       *time.Duration
-	Damage         Roll
+	Damage         rolls.Roll
 }
 
 type Spell struct {

@@ -1,4 +1,4 @@
-package common
+package rolls
 
 import (
 	"crypto/rand"
